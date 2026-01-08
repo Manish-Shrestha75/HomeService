@@ -9,6 +9,7 @@ import reviewRoute from './route/reviewRoute';
 import cookieParser from 'cookie-parser';
 import categoryRoutes from './route/categoryRoute';
 import adminRoutes from './route/adminRoute';
+import { errorHandler } from './utils/ErrorHandler';
 
 dotenv.config();
 
@@ -27,6 +28,14 @@ app.use('/api/review', reviewRoute);
 app.use('/api/categories', categoryRoutes);
 app.use('/api', adminRoutes);
 
+
+app.use('*', (req, res) => {
+    res.status(404).json({ success: false, message: 'Route not found' });
+});
+
+app.use(errorHandler);
+
+export default app;
 // health checking 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");

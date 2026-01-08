@@ -223,7 +223,55 @@ export const updateBookingStatus = async (bookingId: string,providerId: string,s
   };
 };
 
+// get provider eraning 
 
+export const getProviderEarnings = async (providerId: string) => {
+  // Get completed bookings
+  const completedBookings = await bookingRepository.find({
+    where: { 
+      provider: { id: providerId },
+      status: 'completed'
+    },
+    relations: ['service']
+  });
+
+  // Calculate total earnings
+  let total = 0;
+  completedBookings.forEach(booking => {
+    total += booking.service?.price || 0;
+  });
+
+  return {
+    totalEarnings: total,
+    completedJobs: completedBookings.length,
+    bookings: completedBookings.map(b => ({
+      date: b.bookingDate,
+      service: b.service?.name,
+      price: b.service?.price,
+      status: b.status
+    }))
+  };
+};
+
+
+// Get provider job history
+export const getProviderJobHistory = async (providerId: string) => {
+  const bookings = await bookingRepository.find({
+    where: { provider: { id: providerId } },
+    relations: ['service', 'customer'],
+    order: { bookingDate: 'DESC' }
+  });
+
+  return {
+    jobs: bookings.map(b => ({
+      date: b.bookingDate,
+      customer: b.customer?.name,
+      service: b.service?.name,
+      status: b.status,
+      price: b.service?.price
+    }))
+  };
+};
 
 
 

@@ -1,6 +1,6 @@
 // src/controller/bookingController.ts
 import { Request, Response } from 'express';
-import { acceptBooking, cancelBooking, createBooking, rejectBooking, updateBookingStatus, viewCustomerBookings, viewProviderAllBookings } from '../service/bookingService';
+import { acceptBooking, cancelBooking, createBooking, getProviderEarnings, getProviderJobHistory, rejectBooking, updateBookingStatus, viewCustomerBookings, viewProviderAllBookings } from '../service/bookingService';
 
 // create a new booking
 export const createBookingController = async (req: Request, res: Response) => {
@@ -190,6 +190,44 @@ export const updateBookingStatusController = async (req: Request, res: Response)
     return res.status(500).json({
       success: false,
       message: error.message || 'Internal server error'
+    });
+  }
+};
+
+//get all earnings
+export const getEarningsController = async (req: Request, res: Response) => {
+  try {
+    const { providerId } = req.params;
+    
+    const earnings = await getProviderEarnings(providerId);
+    
+    res.json({
+      success: true,
+      data: earnings
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching earnings"
+    });
+  }
+};
+
+// Get provider job history controller
+export const getJobHistoryController = async (req: Request, res: Response) => {
+  try {
+    const { providerId } = req.params;
+    
+    const history = await getProviderJobHistory(providerId);
+    
+    res.json({
+      success: true,
+      data: history
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching job history"
     });
   }
 };
