@@ -16,7 +16,8 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || 'homeService',
   synchronize: true,
   logging: true,
-  entities: [User, Booking, Review, Service]
+  entities: [User, Booking, Review, Service],
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
   
 });
 
