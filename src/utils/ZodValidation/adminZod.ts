@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-// Provider approve/reject param schema
+// Provider  param schema
 export const providerIdParamSchema = z.object({
     providerId: z.string()
         .min(1, "Provider ID is required")
 });
 
-// Approve/Reject provider body schema
+// provider body schema
 export const approveRejectProviderSchema = z.object({
     reason: z.string()
         .max(500, "Reason cannot exceed 500 characters")

@@ -1,17 +1,6 @@
 import { Router } from 'express';
-import { 
-    addServiceController,
-    getProviderController,
-    deleteServiceController,
-    showAllServicesToCustomers
-} from '../controller/providerController';
-import { 
-    validateRequest,
-    validateParams,
-    addServiceSchema,
-    providerIdParamSchema,
-    providerServiceIdSchema
-} from '../utils/ZodValidation/ProviderServiceZod';
+import {  addServiceController, getProviderController,  deleteServiceController,  showAllServicesToCustomers} from '../controller/providerController';
+import {  validateRequest, validateParams,  addServiceSchema,  providerIdParamSchema,  providerServiceIdSchema} from '../utils/ZodValidation/ProviderServiceZod';
 
 const router = Router();
 

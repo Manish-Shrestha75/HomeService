@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {  createReviewController, getCustomerReviewsController, getProviderRating, showProviderRating} from '../controller/reviewController';
 import { isCustomer } from '../middleware/auth.middleware';
-import {  validateRequest, validateParams,  createReviewSchema,  customerIdParamSchema,  providerIdParamSchema} from '../utils/ZodValidation/reviewZOd';
+import {  validateRequest, validateParams,  createReviewSchema,  customerIdParamSchema,  providerIdParamSchema} from '../utils/ZodValidation/reviewZod';
 
 const router = Router();
 
