@@ -15,13 +15,28 @@ import swaggerUi from 'swagger-ui-express';
           url: 'http://localhost:5000',
         },
       ],
+        components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+            description: 'Enter JWT token in the format: Bearer <token>'
+          }
+        }
+      },
     },
     apis: ['./src/docs/*.ts'],
   };
 
   const swaggerSpec = swaggerJsdoc(options);
+  
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      persistAuthorization: true, 
+    },
+  }));
 };
 
 export default setupSwagger;

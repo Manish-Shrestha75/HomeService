@@ -63,9 +63,7 @@
  *                     role:
  *                       type: string
  *                       example: "customer"
- *                     token:
- *                       type: string
- *                       example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                    
  *       400:
  *         description: Bad request
  *         content:
@@ -177,13 +175,15 @@
  *     responses:
  *       200:
  *         description: Profile retrieved successfully
+ *         requestBody:
+ *          required: true
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 success:
- *                   type: boolean 
+ *                   type: boolean
  *                   example: true
  *                 message:
  *                   type: string
@@ -198,7 +198,7 @@
  *                       type: string
  *                       example: "Manish Shrestha"
  *                     email:
- *                       type: string 
+ *                       type: string
  *                       example: "manish@gmail.com"
  *                     role:
  *                       type: string
@@ -208,7 +208,7 @@
  *                       format: date-time
  *                       example: "2024-01-15T10:30:00Z"
  *       401:
- *         description: Unauthorized - No token provided
+ *         description: Unauthorized - No token provided or invalid token
  *         content:
  *           application/json:
  *             schema:
@@ -220,6 +220,8 @@
  *                 message:
  *                   type: string
  *                   example: "No token provided"
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -240,7 +242,7 @@
  *               type: object
  *               properties:
  *                 success:
- *                   type: boolean 
+ *                   type: boolean
  *                   example: true
  *                 message:
  *                   type: string
@@ -257,7 +259,7 @@
  *                         type: string
  *                         example: "Manish Shrestha"
  *                       email:
- *                         type: string 
+ *                         type: string
  *                         example: "manish@gmail.com"
  *                       role:
  *                         type: string
@@ -267,7 +269,7 @@
  *                         format: date-time
  *                         example: "2024-01-15T10:30:00Z"
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - No token or invalid token
  *         content:
  *           application/json:
  *             schema:
@@ -292,6 +294,8 @@
  *                 message:
  *                   type: string
  *                   example: "Admin access only"
+ *       500:
+ *         description: Internal server error
  */
 
 /**
