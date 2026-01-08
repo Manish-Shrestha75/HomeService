@@ -21,6 +21,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+export default app;
+// health checking 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/customer', customerRoutes);
@@ -29,23 +34,15 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api', adminRoutes);
 
 
-app.use('*', (req, res) => {
-    res.status(404).json({ success: false, message: 'Route not found' });
-});
-
 app.use(errorHandler);
 
-export default app;
-// health checking 
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
+
 
  app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
      setupSwagger(app)
      console.log(` Swagger docs at http://localhost:${PORT}/api-docs`);
 });
-  
+ 
   
     
