@@ -4,7 +4,7 @@ import { createReview, getCustomerReviews, getProviderAverageRating, getProvider
 // CREATE REVIEW
 export const createReviewController = async (req: Request, res: Response) => {
   try {
-    const customerId = req.params.customerId; // From URL params
+    const customerId = req.params.customerId; 
     const { bookingId, rating} = req.body;
 
     if (!bookingId || !rating) {

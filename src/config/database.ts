@@ -4,6 +4,8 @@ import { Booking } from '../entities/booking.entity';
 import { Review } from '../entities/review.entity';
 import { Service } from '../entities/service.entity';
 import dotenv from 'dotenv';
+import { Category } from '../entities/category.entity';
+import { OTP } from '../entities/otp.entity';
 
 dotenv.config();
 
@@ -16,8 +18,9 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || 'homeService',
   synchronize: true,
   logging: true,
-  entities: [User, Booking, Review, Service],
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+  entities: [User, Booking, Review, Service, Category, OTP],
+   ssl: {
+        rejectUnauthorized: false}
   
 });
 

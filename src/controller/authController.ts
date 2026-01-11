@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsersService, getUserProfileService, loginService, registerService } from "../service/authService";
+import { getAllUsersService, getUserProfileService, loginService, registerService, requestOTPService, resendOTPService, verifyOTPService } from "../service/authService";
 
 export const registerController = async(req:Request, res:Response)=>{
     try{
@@ -126,4 +126,55 @@ export const logoutController = (req: Request, res: Response) => {
     success: true,
     message: 'Logout successful. Remove token from browser.'
   });
+};
+
+//request otp
+export const requestOTP = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const result = await requestOTPService(email);
+    
+    if (!result.success) {
+        return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
+};
+
+//verify otp
+export const verifyOTP = async (req: Request, res: Response) => {
+    const { email, otp } = req.body;
+    
+    if (!email || !otp) {
+        return res.status(400).json({ error: 'Email and OTP are required' });
+    }
+
+    const result = await verifyOTPService(email, otp);
+    
+    if (!result.success) {
+        return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
+};
+
+// resend otp
+export const resendOTP = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const result = await resendOTPService(email);
+    
+    if (!result.success) {
+        return res.status(400).json(result);
+    }
+
+    res.status(200).json(result);
 };

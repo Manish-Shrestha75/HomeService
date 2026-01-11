@@ -13,8 +13,13 @@ export class User{
     @Column()
     name!:string;
 
-    @Column({default: 'user'})
+      @Column({
+        type: 'enum',
+        enum: ['user', 'admin', 'customer', 'provider'],
+        default: 'user'
+    })
     role!: string;
+
 
     @Column({
         type: 'enum',
