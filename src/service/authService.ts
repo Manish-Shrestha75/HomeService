@@ -4,6 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { OTP } from '../entities/otp.entity';
 import{ sendOTPEmail} from '../utils/nodemailer';
+import { MoreThanOrEqual } from 'typeorm';
 
 const userRepository = AppDataSource.getRepository(User);
 const otpRepository = AppDataSource.getRepository(OTP);
@@ -13,7 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'my_secret_key';
 const checkRequestRateLimit = async (email: string) => {
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
     const count = await otpRepository.count({
-        where: { email, createdAt: { $gte: fifteenMinutesAgo } as any }
+        where: { email, createdAt: MoreThanOrEqual(fifteenMinutesAgo) }
     });
     return count < 3;
 };
@@ -21,7 +22,7 @@ const checkRequestRateLimit = async (email: string) => {
 const checkResendRateLimit = async (email: string) => {
     const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     const count = await otpRepository.count({
-        where: { email, createdAt: { $gte: oneMinuteAgo } as any }
+        where: { email, createdAt: MoreThanOrEqual(oneMinuteAgo) }
     });
     return count < 1;
 };
@@ -30,15 +31,21 @@ const checkDailyLimit = async (email: string) => {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
     const count = await otpRepository.count({
-        where: { email, createdAt: { $gte: startOfDay } as any }
+        where: { email, createdAt: MoreThanOrEqual(startOfDay)}
     });
     return count < 5;
 };
 
 //register service
 
-export const registerService = async( name: string, email:string, password: string, role: string)=>{
+export const registerService = async( name: string, email:string, password: string, confirmPassword: string, role: string)=>{
     const existingUser = await userRepository.findOne({ where: {email}});
+
+    if (password !== confirmPassword) {
+    return{
+        error: "Password didnt match."
+    }
+  }
 
     if(existingUser)
     {
@@ -54,7 +61,6 @@ export const registerService = async( name: string, email:string, password: stri
     return{
         id: user.id,
         name: user.name,
-        password: user.password,
         role: user.role
     }
 

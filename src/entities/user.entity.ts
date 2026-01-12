@@ -3,6 +3,7 @@ import { Service } from './service.entity';
 
 @Entity()
 export class User{
+  [x: string]: any;
     
     @PrimaryGeneratedColumn('uuid')
     id!: string;
@@ -33,6 +34,9 @@ export class User{
 
     @Column()
     password!: string;
+
+     @Column({ nullable: true }) 
+  confirmPassword!: string;
 
     @CreateDateColumn()
     createdAt!: Date;

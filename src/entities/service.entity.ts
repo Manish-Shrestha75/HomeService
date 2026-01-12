@@ -1,5 +1,6 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Entity } from "typeorm";
+import { PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Entity, JoinColumn } from "typeorm";
 import { User } from "./user.entity";
+import { Category } from "./category.entity";
 
 @Entity()
 export class Service {
@@ -14,7 +15,12 @@ export class Service {
 
   @Column('decimal')
     price!: number;
-    
+
+  @Column()
+    status!: string;
+
+  @Column()
+  isActive!: boolean;
 
   @Column()
     category!: string; 
@@ -27,4 +33,5 @@ export class Service {
 
     @Column({ default: true }) 
     isAvailable!: boolean;
+
 }

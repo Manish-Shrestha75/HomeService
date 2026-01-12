@@ -3,7 +3,7 @@ import { getAllUsersService, getUserProfileService, loginService, registerServic
 
 export const registerController = async(req:Request, res:Response)=>{
     try{
-        const { name , email, password, role} = req.body;
+        const { name , email, password, confirmPassword, role} = req.body;
 
         if(!name || !email ||!password ){
             return res.status(400).json({
@@ -12,7 +12,7 @@ export const registerController = async(req:Request, res:Response)=>{
             });
         }
 
-        const user = await registerService(name, email, password, role);
+        const user = await registerService(name, email, password, confirmPassword, role);
         if(!user){
             return res.status(400).json({
                 success: false,

@@ -67,18 +67,31 @@ export const deleteProviderService = async ( serviceId: number, providerId: stri
 };
 
 //show availability
+// pending services should not be shown
 export const getServicesForCustomers = async () => {
   const services = await serviceRepository.find({
-    relations: ['provider']
+    where: { 
+      status: 'approved',
+      isActive: true 
+    },
+    relations: ['provider'],
+    order: {
+      createdAt: 'DESC',
+     
+    }
   });
   
   return {
     services: services.map(s => ({
+      id: s.id, 
       name: s.name,
       description: s.description,  
       price: s.price,              
       category: s.category,
-      provider: s.provider?.name || "Provider"
+      provider: {
+        id: s.provider?.id,
+        name: s.provider?.name || "Provider"
+      }
     }))
   };
 };
