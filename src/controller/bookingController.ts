@@ -64,9 +64,10 @@ export const cancelBookingController = async (req: Request, res: Response) => {
 };
 
 // Get booking 
+// Get customer bookings
 export const getCustomerBookingsController = async (req: Request, res: Response) => {
   try {
-    const customerId = parseInt(req.params.customerId);
+    const customerId = req.params.customerId; // keep as string (UUID)
     const status = req.query.status as string;
 
     if (!customerId) {
@@ -74,12 +75,20 @@ export const getCustomerBookingsController = async (req: Request, res: Response)
     }
 
     const bookings = await viewCustomerBookings(customerId, status);
-    return res.status(200).json(bookings);
-  } catch (error) {
+
+    return res.status(200).json({
+      success: true,
+      data: bookings
+    });
+  } catch (error: any) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ 
+      success: false,
+      message: error.message || 'Internal server error'
+    });
   }
 };
+
 
 //accept booking
 export const acceptBookingController = async (req: Request, res: Response) => {

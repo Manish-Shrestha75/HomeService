@@ -14,7 +14,9 @@ export const addServiceSchema = z.object({
     
     category: z.string()
         .min(1, "Category is required")
-        .max(100, "Category cannot exceed 100 characters")
+        .max(100, "Category cannot exceed 100 characters"),
+        
+        status: z.string().optional() 
 });
 
 export const providerIdParamSchema = z.object({

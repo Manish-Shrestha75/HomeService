@@ -56,17 +56,27 @@ export const createBooking = async (
     };
   }
 
-  const booking = new Booking();
-  booking.bookingDate = bookingDateObj;
-  booking.startTime = startTime;
-  booking.status = "pending";
-  booking.bookingNumber = bookingNumber;
+ const booking = new Booking();
+booking.bookingDate = bookingDateObj;
+booking.startTime = startTime;
+booking.status = "pending";
+booking.bookingNumber = bookingNumber;
 
-  booking.customer = { id: customerId } as any;
-  booking.provider = { id: service.provider.id } as any;
-  booking.service = { id: serviceId } as any;
+// calculate endTime as 1 hour later
+{
+  const [hour, minute] = startTime.split(":").map(Number);
+  const endHour = hour + 1;
+  booking.endTime = `${endHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}
 
-  return await bookingRepository.save(booking);
+
+booking.customer = { id: customerId } as any;
+booking.provider = { id: service.provider.id } as any;
+booking.service = { id: serviceId } as any;
+
+return await bookingRepository.save(booking);
+
+
 };
 
 //cancel booking
@@ -109,19 +119,15 @@ export const cancelBooking = async (bookingId: string, customerId: string) => {
 };
 
 // get bookings
-export const viewCustomerBookings = async (
-  customerId: number,
-  status?: string
-) => {
+export const viewCustomerBookings = async (customerId: string, status?: string) => {
   const where: any = { customer: { id: customerId } };
 
   if (status) {
     where.status = status;
   }
-
   return await bookingRepository.find({
     where,
-    relations: ["service", "provider", "service.category"],
+    relations: ["service", "provider"],
     order: { bookingDate: "DESC" },
   });
 };

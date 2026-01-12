@@ -32,8 +32,7 @@ export const createCategory = async (name: string, description?: string) => {
 //get categories
 export const getAllCategoriesService = async () => {
   const category =  await categoryRepository.find({
-    where: { isActive: true },
-    relations: ['services']
+    where: { isActive: true }
   });
 
   return{
@@ -74,7 +73,7 @@ export const deleteCategory = async (categoryId: number) => {
   
   const category = await categoryRepository.findOne({
     where: {id: categoryId.toString() },
-    relations: ['services']
+    
   });
 
   if (!category) {
@@ -83,7 +82,9 @@ export const deleteCategory = async (categoryId: number) => {
     };
   }
 
-   return {
-    message: "Category deleted"
-  };
+  category.isActive = false;
+  category.updatedAt = new Date();
+  await categoryRepository.save(category);
+
+  return { message: "Category deleted" };
 };

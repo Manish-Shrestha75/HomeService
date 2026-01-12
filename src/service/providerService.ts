@@ -6,29 +6,35 @@ const serviceRepository = AppDataSource.getRepository(Service);
 const userRepository = AppDataSource.getRepository(User);
 
 //adding the service 
-export const AddProviderService = async(providerId: string, name: string, description: string,price: number,category: string) =>{
+export const AddProviderService = async( providerId: string,  name: string,  description: string,   price: number,   category: string,   status: string  ) => {
 
     const provider = await userRepository.findOne({
         where:{ id: providerId, role: 'provider'}
-        
     });
 
     if(!provider){
-        return({
-            message:"Provider not found."
-        });
+        return { message:"Provider not found." };
     }
-    //creating service
+
+    // Create service
     const service = serviceRepository.create({
-        name, description, price, category, provider: { id: providerId}
-    });
-      const savedService = await serviceRepository.save(service);
+    name,
+    description,
+    price,
+    category,
+    status: status || 'pending',
+    provider: provider, 
+    isActive: true
+});
+
+    const savedService = await serviceRepository.save(service);
 
     return {
         message: "Service added",
         data: savedService
     }
 };
+
 
 
 //get Service

@@ -5,7 +5,7 @@ import {  validateRequest, validateParams,  createReviewSchema,  customerIdParam
 
 const router = Router();
 
-router.post('/customer/:customerId', validateParams(customerIdParamSchema), isCustomer, validateRequest(createReviewSchema), createReviewController);
+router.post('/customer/:customerId', validateParams(customerIdParamSchema),  validateRequest(createReviewSchema), createReviewController);
 router.get('/customer/:customerId', validateParams(customerIdParamSchema), getCustomerReviewsController);
 router.get('/providers/:providerId/rating', validateParams(providerIdParamSchema), getProviderRating);
 router.get('/providers/:providerId/rating', validateParams(providerIdParamSchema), showProviderRating);

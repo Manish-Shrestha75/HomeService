@@ -16,14 +16,12 @@ export class Service {
   @Column('decimal')
     price!: number;
 
-  @Column()
-    status!: string;
-
+  @Column({ default: 'pending' })
+status!: string;
   @Column()
   isActive!: boolean;
 
-  @Column()
-    category!: string; 
+ 
 
   @ManyToOne(() => User)
     provider!: User;
@@ -33,5 +31,9 @@ export class Service {
 
     @Column({ default: true }) 
     isAvailable!: boolean;
+
+    @Column()
+category!: string;
+
 
 }

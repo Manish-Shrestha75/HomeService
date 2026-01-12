@@ -13,8 +13,7 @@ export class Category{
     description!: string;
 
 
-    @OneToMany(() => Service, (service) => service.category)
-    services!: Service[];
+ 
 
     @Column({ default: true })
     isActive!: boolean;

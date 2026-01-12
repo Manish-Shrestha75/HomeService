@@ -6,7 +6,7 @@ import { acceptBooking } from '../service/bookingService';
 export const addServiceController = async (req: Request, res: Response) => {
   try {
     const providerId = req.params.providerId;
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, status } = req.body;
 
     if (!name || !description || !price || !category) {
       return res.status(400).json({
@@ -15,14 +15,21 @@ export const addServiceController = async (req: Request, res: Response) => {
       });
     }
 
+    const serviceStatus = status || 'pending';
+
     const result = await AddProviderService(
-      providerId, name, description, price, category
+      providerId,
+      name,
+      description,
+      price,
+      category,
+      serviceStatus
     );
 
     return res.status(201).json({
       success: true,
-      message: "Service added Sucessfully.",
-      data: result
+      message: "Service added successfully.",
+      data: result.data
     });
 
   } catch (error: any) {
@@ -32,7 +39,6 @@ export const addServiceController = async (req: Request, res: Response) => {
     });
   }
 };
-
 // get service 
 export const getProviderController = async (req: Request, res: Response)=>{
     try{

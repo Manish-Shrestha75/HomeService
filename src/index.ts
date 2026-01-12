@@ -10,11 +10,13 @@ import cookieParser from 'cookie-parser';
 import categoryRoutes from './route/categoryRoute';
 import adminRoutes from './route/adminRoute';
 import { errorHandler } from './utils/ErrorHandler';
+import providerRoute from './route/providerRoute';
+import bookingRoute from './route/bookingRoute';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -32,6 +34,8 @@ app.use('/api/customer', customerRoutes);
 app.use('/api/review', reviewRoute);
 app.use('/api/categories', categoryRoutes);
 app.use('/api', adminRoutes);
+app.use('/api/provider', providerRoute);
+app.use('/api/booking', bookingRoute);
 
 
 app.use(errorHandler);
