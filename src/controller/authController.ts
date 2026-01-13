@@ -38,41 +38,48 @@ export const registerController = async(req:Request, res:Response)=>{
     }
 }
 
-export const loginController = async( req: Request, res: Response)=>{
-    try{
-        const { email, password} = req.body;
+export const loginController = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
 
-        if(!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: " Email or Password Missing."
-
-            });
-
-        }
-        const result = await loginService(email, password);
-        
-        if(!result){
-            return res.status(400).json({
-                success: false,
-                message:"Invalid credentials"
-            });
-        }
-        return res.status(200).json({
-            success: true,
-            message: "You are Logged In sucessfully.",
-            data: result
-        })
-        }
-    
-    catch(error:any){
-        return res.status(400).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email or Password Missing."
+      });
     }
+
+    const result = await loginService(email, password);
+
+    if (!result) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials"
+      });
+    }
+
+   
+    res.cookie('token', result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged in successfully",
+      user: result.user
+    });
+
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
+
 
 export const getProfile = async(req: Request, res: Response)=>{
     try{
@@ -121,12 +128,20 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+//logout
 export const logoutController = (req: Request, res: Response) => {
-  res.json({
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production'
+  });
+
+  return res.status(200).json({
     success: true,
-    message: 'Logout successful. Remove token from browser.'
+    message: 'Logged out successfully'
   });
 };
+
 
 //request otp
 export const requestOTP = async (req: Request, res: Response) => {
@@ -141,6 +156,7 @@ export const requestOTP = async (req: Request, res: Response) => {
     if (!result.success) {
         return res.status(400).json(result);
     }
+    
 
     res.status(200).json(result);
 };

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
-const EMAIL_USER = '';
-const EMAIL_PASS = ''; 
+const EMAIL_USER = 'bantuxtha@gmail.com';
+const EMAIL_PASS = 'ceqdknqcqiamtzjf'; 
 
 console.log('Using hardcoded email:', EMAIL_USER);
 

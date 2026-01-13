@@ -86,6 +86,8 @@ export const registerService = async( name: string, email:string, password: stri
         JWT_SECRET,
         {expiresIn: '7d'})
 
+        
+
     return {
         sucess: true,
         user: {
